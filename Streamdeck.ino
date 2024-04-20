@@ -10,12 +10,12 @@
 #define TC_W_ADDR 0x70
 #define TC_R_ADDR 0x71
 #define buttonpin 6  //pins
-#define a1 36     //pins
-#define a2 37     //pins
-#define a3 38     //pins
-#define sound 35  //pins
-#define x 33      //pins
-#define y 34      //pins
+#define a1 36        //pins
+#define a2 37        //pins
+#define a3 38        //pins
+#define sound 35     //pins
+#define x 33         //pins
+#define y 34         //pins
 #define EEPROM_SIZE 1024
 #define NUM_LEDS 16  //define
 
@@ -32,7 +32,6 @@ QueueHandle_t uartin;
 CRGB leds[NUM_LEDS];  //var
 
 void i2c_init_1(void *p) {
-  Wire.setClock(10000);
   Wire.beginTransmission(TC_W_ADDR);
   for (int i = 0; i <= 7; i++) {
     Wire.write(EEPROM.read(i));
@@ -54,7 +53,6 @@ void i2c_init_1(void *p) {
 }
 
 void i2c_init_2(void *p) {
-  Wire1.setClock(10000);
   Wire1.beginTransmission(TC_W_ADDR);
   for (int i = 7; i <= 15; i++) {
     Wire1.write(EEPROM.read(i));
@@ -88,7 +86,7 @@ void setup() {
   }
   Serial.printf("I2C initing...\n");
   if (Wire.begin()) {  // I2C1 init
-    if (!Wire.setPins(14, 15)) {
+    if (!(Wire.setPins(14, 15) && Wire.setClock(9600))) {
       Serial.printf("I2C 1 Init Failed! Reseting....");
       ESP.restart();
     }
@@ -97,7 +95,7 @@ void setup() {
     ESP.restart();
   }
   if (Wire1.begin()) {  // I2C2 init
-    if (!Wire1.setPins(13, 12)) {
+    if (!(Wire1.setPins(14, 15) && Wire1.setClock(9600))) {
       Serial.printf("I2C 2 Init Failed! Reseting....");
       ESP.restart();
     }
@@ -133,11 +131,18 @@ void setup() {
   Serial.printf("RGB Inited! Initing Others....\n");
   uartin = xQueueCreate(1, sizeof(String));
   queue = xQueueCreate(1, sizeof(quetran));
+  xTaskCreate(uart,
+              "uart",
+              2048,
+              NULL,
+              5,
+              NULL);
+  
 }
 
 
 void uart(void *p) {
-  
+
   while (1) {
     String in;
     if (Serial.available() > 0) {

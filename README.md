@@ -1,2 +1,3 @@
 # Streamdeck_one_esp32
 esp32s2 streamdeck,torch by STC80S16B to detect torch.Unfinsh...
+TODO:     Computer program,torch detect i2c,adc,etc

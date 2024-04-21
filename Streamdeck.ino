@@ -24,12 +24,21 @@ uint16_t sum = 0;   // checksum
 StaticJsonDocument<500> jsonBuffer;
 typedef struct quetran {
   int buttonpress[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };  // torch 1 - 16,i6 dev by user
-  float adc[6] = { 0.00, 0.00, 0.00, 0.00, 0.00, 0.00 };                     // a1,a2,a3,sound,a1|x,a2|y
-} quetran;
-bool EEPROM_check = false;  // EEPROM use
+  int adc[6] = { 0.00, 0.00, 0.00, 0.00, 0.00, 0.00 };                      //  a1,a2,a3,sound,a1|x,a2|y
+  
+} quetran;                                                                 //queuetranfrom
+typedef struct jsonio
+{
+    /* data */
+    int rgb[48] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} //r,g,b,r,g,b
+    int c[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+
+}jsonio;
+
+bool EEPROM_check = false;                                                // EEPROM useable
 QueueHandle_t queue;
 QueueHandle_t uartin;
-CRGB leds[NUM_LEDS];  //var
+CRGB leds[NUM_LEDS];                                                    //var
 
 void i2c_init_1(void *p) {
   Wire.beginTransmission(TC_W_ADDR);
@@ -139,25 +148,30 @@ void setup() {
   
 }
 
-void main_torch_hand(void *p){
+jsonio json(String json){ //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+}
+
+void main_input_hand(void *p){
   while(1){
+    quetran thisout;
     uint8_t torch = Wire.requestFrom(TC_R_ADDR, 1,false);
     uint8_t torch_r = Wire.requestFrom(TC_R_ADDR, 1,true); //unuse
     uint8_t torch1 = Wire1.requestFrom(TC_R_ADDR, 1,false);
     torch_r = Wire.requestFrom(TC_R_ADDR, 1,true); // unuse
-    int tornow[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     for (int i = 0;i<=7;i++){
-        tornow[i] = ((torch) >> (i)) & 0x01
+        thisout.buttonpress[i] = ((torch) >> (i)) & 0x01
     }
     for (int i = 8;i<=15;i++){
-        tornow[i] = ((torch1) >> (i)) & 0x01
+        thisout.buttonpress[i] = ((torch1) >> (i)) & 0x01
     }
-    
-  }
-}
-void main_adc_hand(void *p){
-  while (1){
-
+    thisout.adc[0] = analogRead(a1);
+    thisout.adc[1] = analogRead(a2);
+    thisout.adc[2] = analogRead(a3);
+    thisout.adc[3] = analogRead(sound);
+    thisout.adc[4] = analogRead(x);
+    thisout.adc[5] = analogRead(y);
+    xQueueSend(queue, (void *)&thisout, 0);
   }
 }
 void main_rgb_hand(void *p){
@@ -174,7 +188,7 @@ void main_uart_hand(void *p) {
   while (1) {
     String in;
     if (Serial.available() > 0) {
-      in = Serial.readString();
+      in = Serial.readStringUntil("\n")
       xQueueSend(uartin, (void *)&in, 0);
     }
     quetran beout;

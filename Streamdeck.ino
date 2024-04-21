@@ -20,7 +20,7 @@
 #define NUM_LEDS 16  //define
 
 int addr = 0;  //EEPROM addr
-int sum = 0;   // checksum
+uint16_t sum = 0;   // checksum
 StaticJsonDocument<500> jsonBuffer;
 typedef struct quetran {
   int buttonpress[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };  // torch 1 - 16,i6 dev by user
@@ -39,7 +39,7 @@ void i2c_init_1(void *p) {
   }
   Wire.write(sum);
   Wire.endTransmission(true);
-  uint8_t ack = Wire.requestFrom(TC_R_ADDR, 1);
+  uint16_t ack = Wire.requestFrom(TC_R_ADDR, 1);
   if (ack == 0x53) {
     Serial.println("I2C1 Data transfor complete!\n");
     for (int i = 0; i <= 7; i++) {
@@ -60,7 +60,7 @@ void i2c_init_2(void *p) {
   }
   Wire1.write(sum);
   Wire1.endTransmission(true);
-  uint8_t ack = Wire1.requestFrom(TC_R_ADDR, 1);
+  uint16_t ack = Wire1.requestFrom(TC_R_ADDR, 1);
   if (ack == 0x53) {
     Serial.println("I2C2 Data transfor complete!\n");
     for (int i = 7; i <= 15; i++) {
@@ -131,7 +131,7 @@ void setup() {
   Serial.printf("RGB Inited! Initing Others....\n");
   uartin = xQueueCreate(1, sizeof(String));
   queue = xQueueCreate(1, sizeof(quetran));
-  xTaskCreate(uart,
+  xTaskCreate(main_uart_hand,
               "uart",
               2048,
               NULL,
@@ -140,8 +140,28 @@ void setup() {
   
 }
 
+void main_torch_hand(void *p){
+  while(1){
+    uint16_t torch = Wire.requestFrom(TC_R_ADDR, 2,true);
+    uint16_t torch = Wire1.requestFrom(TC_R_ADDR, 2,true);
+    
+  }
+}
+void main_adc_hand(void *p){
+  while (1){
 
-void uart(void *p) {
+  }
+}
+void main_rgb_hand(void *p){
+  while(1){
+
+  }
+}
+void scan_i2c_devices(void *p){ // detect another i2c devices
+
+  vTaskDelete(NULL);
+}
+void main_uart_hand(void *p) {
 
   while (1) {
     String in;

@@ -76,7 +76,6 @@ void i2c_init_2(void *p) {
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  Serial.setDebugOutput(true);
   Serial.printf("Starting system init,EEPROM init \n");
   if (!EEPROM.begin(EEPROM_SIZE)) {
     Serial.println("failed to initialise EEPROM! Config will not can be write or read!\n");
@@ -142,8 +141,17 @@ void setup() {
 
 void main_torch_hand(void *p){
   while(1){
-    uint16_t torch = Wire.requestFrom(TC_R_ADDR, 2,true);
-    uint16_t torch = Wire1.requestFrom(TC_R_ADDR, 2,true);
+    uint8_t torch = Wire.requestFrom(TC_R_ADDR, 1,false);
+    uint8_t torch_r = Wire.requestFrom(TC_R_ADDR, 1,true); //unuse
+    uint8_t torch1 = Wire1.requestFrom(TC_R_ADDR, 1,false);
+    torch_r = Wire.requestFrom(TC_R_ADDR, 1,true); // unuse
+    int tornow[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    for (int i = 0;i<=7;i++){
+        tornow[i] = ((torch) >> (i)) & 0x01
+    }
+    for (int i = 8;i<=15;i++){
+        tornow[i] = ((torch1) >> (i)) & 0x01
+    }
     
   }
 }

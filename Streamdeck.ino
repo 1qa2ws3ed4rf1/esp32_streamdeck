@@ -19,26 +19,25 @@
 #define EEPROM_SIZE 1024
 #define NUM_LEDS 16  //define
 
-int addr = 0;  //EEPROM addr
-uint16_t sum = 0;   // checksum
+int addr = 0;      //EEPROM addr
+uint16_t sum = 0;  // checksum
 StaticJsonDocument<500> jsonBuffer;
 typedef struct quetran {
   int buttonpress[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };  // torch 1 - 16,i6 dev by user
-  int adc[6] = { 0.00, 0.00, 0.00, 0.00, 0.00, 0.00 };                      //  a1,a2,a3,sound,a1|x,a2|y
-  
-} quetran;                                                                 //queuetranfrom
-typedef struct jsonio
-{
-    /* data */
-    int rgb[48] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} //r,g,b,r,g,b
-    int c[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+  int adc[6] = { 0, 0, 0, 0, 0, 0 };                                         //  a1,a2,a3,sound,a1|x,a2|y
 
-}jsonio;
+} quetran;  //queuetranfrom
+typedef struct jsonio {
+  /* data */
+  int rgb[48] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };  //r,g,b,r,g,b
+  int c[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-bool EEPROM_check = false;                                                // EEPROM useable
+} jsonio;
+
+bool EEPROM_check = false;  // EEPROM useable
 QueueHandle_t queue;
 QueueHandle_t uartin;
-CRGB leds[NUM_LEDS];                                                    //var
+CRGB leds[NUM_LEDS];  //var
 
 void i2c_init_1(void *p) {
   Wire.beginTransmission(TC_W_ADDR);
@@ -85,6 +84,7 @@ void i2c_init_2(void *p) {
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
+  Serial1.begin(115200);  //garbage throw at here
   Serial.printf("Starting system init,EEPROM init \n");
   if (!EEPROM.begin(EEPROM_SIZE)) {
     Serial.println("failed to initialise EEPROM! Config will not can be write or read!\n");
@@ -137,7 +137,7 @@ void setup() {
     delay(100);
   }  // clear leds
   Serial.printf("RGB Inited! Initing Others....\n");
-  uartin = xQueueCreate(1, sizeof(String));
+  uartin = xQueueCreate(1, sizeof(jsonio));
   queue = xQueueCreate(1, sizeof(quetran));
   xTaskCreate(main_uart_hand,
               "uart",
@@ -145,25 +145,38 @@ void setup() {
               NULL,
               5,
               NULL);
-  
 }
 
-jsonio json(String json){ //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+jsonio json(String json) {
+  StaticJsonDocument<500> jsonBuffer;
+  DeserializationError error = deserializeJson(jsonBuffer, const_cast<char *>(json.c_str()));
+  if (error) {
+    Serial.print(F("DeserializeJson failed: "));
+    Serial.println(error.f_str());
+  }
+  jsonio thisoutput;
+  for (int i = 0; i <= 47; i++) {
+    thisoutput.rgb[i] = jsonBuffer["rgb"][i];
+  }
+  for (int i = 0; i <= 15; i++) {
+    thisoutput.c[i] = jsonBuffer["c"][i];
+  }
+  return thisoutput;
 }
 
-void main_input_hand(void *p){
-  while(1){
+void main_input_hand(void *p) {
+  while (1) {
     quetran thisout;
-    uint8_t torch = Wire.requestFrom(TC_R_ADDR, 1,false);
-    uint8_t torch_r = Wire.requestFrom(TC_R_ADDR, 1,true); //unuse
-    uint8_t torch1 = Wire1.requestFrom(TC_R_ADDR, 1,false);
-    torch_r = Wire.requestFrom(TC_R_ADDR, 1,true); // unuse
-    for (int i = 0;i<=7;i++){
-        thisout.buttonpress[i] = ((torch) >> (i)) & 0x01
+    uint8_t torch = Wire.requestFrom(TC_R_ADDR, 1, false);
+    uint8_t torch_r = Wire.requestFrom(TC_R_ADDR, 1, true);  //unuse
+    uint8_t torch1 = Wire1.requestFrom(TC_R_ADDR, 1, false);
+    torch_r = Wire.requestFrom(TC_R_ADDR, 1, true);  // unuse
+    Serial1.println(torch_r);
+    for (int i = 0; i <= 7; i++) {
+      thisout.buttonpress[i] = ((torch) >> (i)) & 0x01;
     }
-    for (int i = 8;i<=15;i++){
-        thisout.buttonpress[i] = ((torch1) >> (i)) & 0x01
+    for (int i = 8; i <= 15; i++) {
+      thisout.buttonpress[i] = ((torch1) >> (i)) & 0x01;
     }
     thisout.adc[0] = analogRead(a1);
     thisout.adc[1] = analogRead(a2);
@@ -172,14 +185,14 @@ void main_input_hand(void *p){
     thisout.adc[4] = analogRead(x);
     thisout.adc[5] = analogRead(y);
     xQueueSend(queue, (void *)&thisout, 0);
+    vTaskDelay(30);
   }
 }
-void main_rgb_hand(void *p){
-  while(1){
-
+void main_rgb_hand(void *p) {
+  while (1) {
   }
 }
-void scan_i2c_devices(void *p){ // detect another i2c devices
+void scan_i2c_devices(void *p) {  // detect another i2c devices
 
   vTaskDelete(NULL);
 }
@@ -188,8 +201,9 @@ void main_uart_hand(void *p) {
   while (1) {
     String in;
     if (Serial.available() > 0) {
-      in = Serial.readStringUntil("\n")
-      xQueueSend(uartin, (void *)&in, 0);
+      in = Serial.readStringUntil('\n'); 
+      jsonio inj = json(in);
+      xQueueSend(uartin,&inj,0);
     }
     quetran beout;
     if (xQueueReceive(queue, (void *)&beout, 0) == errQUEUE_EMPTY) {

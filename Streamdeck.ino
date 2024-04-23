@@ -84,7 +84,7 @@ void i2c_init_2(void *p) {
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  Serial1.begin(115200);  //garbage throw at here
+  Serial1.begin(115200);  //garbage throw at here... (commit error)
   Serial.printf("Starting system init,EEPROM init \n");
   if (!EEPROM.begin(EEPROM_SIZE)) {
     Serial.println("failed to initialise EEPROM! Config will not can be write or read!\n");

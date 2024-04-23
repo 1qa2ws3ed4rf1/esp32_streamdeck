@@ -139,12 +139,32 @@ void setup() {
   Serial.printf("RGB Inited! Initing Others....\n");
   uartin = xQueueCreate(1, sizeof(jsonio));
   queue = xQueueCreate(1, sizeof(quetran));
+  xTaskCreate(main_input_hand,
+              "input",
+              2048,
+              NULL,
+              5,
+              NULL);
   xTaskCreate(main_uart_hand,
               "uart",
               2048,
               NULL,
               5,
               NULL);
+  xTaskCreate(main_c_rgb_hand,
+              "rgb",
+              1024,
+              NULL,
+              5,
+              NULL);
+  xTaskCreate(scan_i2c_devices,
+              "scan",
+              1024,
+              NULL,
+              5,
+              NULL);
+  Serial.printf("FreeRTOS inited! System init complete!\n");
+  Serial.printf("ST\n"); // start transfrom
 }
 
 jsonio json(String json) {
@@ -188,12 +208,52 @@ void main_input_hand(void *p) {
     vTaskDelay(30);
   }
 }
-void main_rgb_hand(void *p) {
+void main_c_rgb_hand(void *p) {
   while (1) {
+    jsonio bein;
+    if (xQueueReceive(uartin, (void *)&bein, 0) == errQUEUE_EMPTY) {
+    } else {
+      for (int i = 0; i <= 47; i = i + 3) {
+        int nowled = 0;
+        leds[nowled] = CRGB(bein.rgb[i], bein.rgb[i + 1], bein.rgb[i + 2]);
+        nowled++;
+      }
+      int f = 0;
+      for (int i = 0; i <= 15; i++) {
+        if (bein.c[i] == 0) {
+          f++;
+        }
+      }
+      if (f == 16) {
+        if (EEPROM_check) {
+          for (int i = 0; i <= 15; i++) {
+            EEPROM.write(i, bein.c[i]);
+          }
+        }
+      }
+    }
   }
 }
 void scan_i2c_devices(void *p) {  // detect another i2c devices
-
+  byte error, address;
+  int nDevices = 0;
+  Serial.println("Scanning for I2C devices ...");
+  for (address = 0x01; address < 0x7f; address++) {
+    if (address == TC_R_ADDR || address == TC_W_ADDR) {
+    } else {
+      Wire.beginTransmission(address);
+      error = Wire.endTransmission();
+      if (error == 0) {
+        Serial.printf("I2C device found at address 0x%02X\n", address);
+        nDevices++;
+      } else if (error != 2) {
+        Serial.printf("Error %d at address 0x%02X\n", error, address);
+      }
+    }
+  }
+  if (nDevices == 0) {
+    Serial.println("No I2C devices found");
+  }
   vTaskDelete(NULL);
 }
 void main_uart_hand(void *p) {
@@ -201,9 +261,9 @@ void main_uart_hand(void *p) {
   while (1) {
     String in;
     if (Serial.available() > 0) {
-      in = Serial.readStringUntil('\n'); 
+      in = Serial.readStringUntil('\n');
       jsonio inj = json(in);
-      xQueueSend(uartin,&inj,0);
+      xQueueSend(uartin, &inj, 0);
     }
     quetran beout;
     if (xQueueReceive(queue, (void *)&beout, 0) == errQUEUE_EMPTY) {

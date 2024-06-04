@@ -1,10 +1,11 @@
-#include <ShiftIn.h>
+#include "ShiftIn.h"
 #include <ArduinoJson.h>
 #include <ArduinoJson.hpp>
 #include <Arduino.h>
+// #include <controller.h>
 #include <FastLED.h>  //include
 
-// lib:Fastled,ArduinoJson,fastshiftin Board:esp32s2
+// lib:Fastled,ArduinoJson Board:esp32s2
 #define buttonpin 6  // pins
 #define a1 14        // pins
 #define a2 15        // pins
@@ -33,7 +34,7 @@ QueueHandle_t uartin;
 CRGB leds[NUM_LEDS];  // var
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(115200);
+  Serial.begin(512000);
   Serial1.begin(115200);  // garbage throw at here...
   Serial.printf("Starting system init,LEDS init and shift init \n");
   shift.begin(34, 36, 33, 35);
@@ -50,21 +51,21 @@ void setup() {
   Serial.printf("RGB Inited! Initing Freertos....\n");
   uartin = xQueueCreate(1, sizeof(jsonio));
   queue = xQueueCreate(1, sizeof(quetran));
-  xTaskCreate(main_input_hand,
-              "input",
-              2048,
-              NULL,
-              5,
-              NULL);
   xTaskCreate(main_uart_hand,
               "uart",
               2048,
               NULL,
               5,
               NULL);
+  xTaskCreate(main_input_hand,
+              "input",
+              2048,
+              NULL,
+              5,
+              NULL);
   xTaskCreate(main_rgb_hand,
               "rgb",
-              1024,
+              2048,
               NULL,
               5,
               NULL);
@@ -87,21 +88,21 @@ jsonio json(String json) {
 }
 
 void main_input_hand(void *p) {
+  Serial.println("adcoutput");
   while (1) {
-    if (shift.update()) {
-      for (int i = 0; i < shift.getDataWidth(); i++) {
-        
-      }
-    }
     quetran thisout;
+    unsigned int sft = shift.read();
+    for (int i = 15; i >= 0; i--) {
+      thisout.buttonpress[i] = bitRead(sft,i);// 15->1 14->2 13->3 12->4 11->5 10->6 9->7 8->6 7->16 6->15 5->14 4->13 3->9 2->10 1->11 0->12
+    }
     thisout.adc[0] = adc_read_val(a1);  // a1
     thisout.adc[1] = adc_read_val(a2);
     thisout.adc[2] = adc_read_val(a3);
     thisout.adc[3] = adc_read_val(sound);
     thisout.adc[4] = adc_read_val(x);
     thisout.adc[5] = adc_read_val(y);
-    xQueueSend(queue, (void *)&thisout, 0);
-    // vTaskDelay(30);
+    xQueueOverwrite(queue, (void *)&thisout);
+    vTaskDelay(5);
   }
 }
 void main_rgb_hand(void *p) {
@@ -109,9 +110,10 @@ void main_rgb_hand(void *p) {
     jsonio bein;
     if (xQueueReceive(uartin, (void *)&bein, 0) == errQUEUE_EMPTY) {
     } else {
+      int nowled = 0;
       for (int i = 0; i <= 47; i = i + 3) {
-        int nowled = 0;
         leds[nowled] = CRGB(bein.rgb[i], bein.rgb[i + 1], bein.rgb[i + 2]);
+        FastLED.show();
         nowled++;
       }
     }
@@ -119,43 +121,44 @@ void main_rgb_hand(void *p) {
 }
 uint32_t adc_read_val(int chan) {
 
-  int samplingFrequency = 250;  // 采样频率（可调）
+  int samplingFrequency = 260;  // 采样频率（可调）
   long sum = 0;                 // 采样和
   float samples = 0.0;          // 采样平均值
 
   for (int i = 0; i < samplingFrequency; i++) {
     sum += analogRead(chan);
-    delayMicroseconds(100);
+    delayMicroseconds(40);
   }
   samples = sum / (float)samplingFrequency;
   return samples;  //单位(mV)
 }
 void main_uart_hand(void *p) {
-
   while (1) {
     String in;
     if (Serial.available() > 0) {
       in = Serial.readStringUntil('\n');
       jsonio inj = json(in);
-      xQueueSend(uartin, &inj, 0);
+      xQueueOverwrite(uartin, &inj);
     }
     quetran beout;
-    if (xQueueReceive(queue, (void *)&beout, 0) == errQUEUE_EMPTY) {
+
+    if (xQueueReceive(queue, (void *)&beout, 30) == errQUEUE_EMPTY) {
     } else {
+
+      JsonArray button = jsonBuffer.createNestedArray("button");
+      for (int i = 0; i <= 15; i++) {
+        button.add(beout.buttonpress[i]);
+      }
+      JsonArray adc = jsonBuffer.createNestedArray("adc");
+      for (int i = 0; i <= 5; i++) {
+        adc.add(beout.adc[i]);
+      }
+      String uartoutput;
+      serializeJson(jsonBuffer, uartoutput);
+      Serial.println(uartoutput+"Eof");
     }
-    JsonArray button = jsonBuffer.createNestedArray("button");
-    for (int i = 0; i <= 15; i++) {
-      button.add(beout.buttonpress[i]);
-    }
-    JsonArray adc = jsonBuffer.createNestedArray("adc");
-    for (int i = 0; i <= 5; i++) {
-      adc.add(beout.adc[i]);
-    }
-    String uartoutput;
-    serializeJson(jsonBuffer, uartoutput);
-    Serial.println(uartoutput);
   }
 }
-}
+
 
 void loop() {}  // Use freertos....

@@ -1,0 +1,273 @@
+[gd_scene load_steps=8 format=3 uid="uid://bgai1j8wpe3mj"]
+
+[ext_resource type="Script" path="res://Serial.cs" id="1_5of2a"]
+[ext_resource type="Texture2D" uid="uid://c8qmvfbmniqqe" path="res://3D_1-PCB_PCB_New1_2_2024-07-23.png" id="1_nmio5"]
+[ext_resource type="Script" path="res://1.gd" id="3_os8r7"]
+[ext_resource type="Script" path="res://2.gd" id="5_ht15u"]
+[ext_resource type="Script" path="res://3.gd" id="6_pcniu"]
+[ext_resource type="Script" path="res://Button.gd" id="7_7dava"]
+[ext_resource type="Script" path="res://4.gd" id="7_bt8ef"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_5of2a")
+
+[node name="3d1-pcbPcbNew122024-07-23" type="Sprite2D" parent="."]
+position = Vector2(260, 283)
+scale = Vector2(0.22, 0.22)
+texture = ExtResource("1_nmio5")
+metadata/_edit_lock_ = true
+
+[node name="Label4" type="Label" parent="."]
+offset_left = 133.0
+offset_top = 335.0
+offset_right = 196.0
+offset_bottom = 358.0
+text = "
+"
+
+[node name="Label3" type="Label" parent="."]
+offset_left = 23.0
+offset_top = 328.0
+offset_right = 86.0
+offset_bottom = 351.0
+text = "
+"
+
+[node name="Label2" type="Label" parent="."]
+offset_left = 77.0
+offset_top = 268.0
+offset_right = 140.0
+offset_bottom = 291.0
+text = "
+"
+
+[node name="Label" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 6.0
+offset_right = 227.0
+offset_bottom = 29.0
+text = "ESP32_Streamdeck Control"
+
+[node name="1" type="Node" parent="."]
+script = ExtResource("3_os8r7")
+
+[node name="button1" type="TextureButton" parent="1"]
+offset_left = 259.0
+offset_top = 83.0
+offset_right = 299.0
+offset_bottom = 153.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="button2" type="TextureButton" parent="1"]
+offset_left = 315.0
+offset_top = 79.0
+offset_right = 355.0
+offset_bottom = 149.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="button3" type="TextureButton" parent="1"]
+offset_left = 368.0
+offset_top = 82.0
+offset_right = 413.0
+offset_bottom = 152.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="button4" type="TextureButton" parent="1"]
+offset_left = 418.0
+offset_top = 83.0
+offset_right = 463.0
+offset_bottom = 153.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="2" type="Node" parent="."]
+script = ExtResource("5_ht15u")
+
+[node name="button1" type="TextureButton" parent="2"]
+offset_left = 259.0
+offset_top = 83.0
+offset_right = 299.0
+offset_bottom = 153.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="button2" type="TextureButton" parent="2"]
+offset_left = 315.0
+offset_top = 79.0
+offset_right = 355.0
+offset_bottom = 149.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="button3" type="TextureButton" parent="2"]
+offset_left = 368.0
+offset_top = 82.0
+offset_right = 413.0
+offset_bottom = 152.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="button4" type="TextureButton" parent="2"]
+offset_left = 418.0
+offset_top = 83.0
+offset_right = 463.0
+offset_bottom = 153.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="3" type="Node" parent="."]
+script = ExtResource("6_pcniu")
+
+[node name="button1" type="TextureButton" parent="3"]
+offset_left = 259.0
+offset_top = 83.0
+offset_right = 299.0
+offset_bottom = 153.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="button2" type="TextureButton" parent="3"]
+offset_left = 315.0
+offset_top = 79.0
+offset_right = 355.0
+offset_bottom = 149.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="button3" type="TextureButton" parent="3"]
+offset_left = 368.0
+offset_top = 82.0
+offset_right = 413.0
+offset_bottom = 152.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="button4" type="TextureButton" parent="3"]
+offset_left = 418.0
+offset_top = 83.0
+offset_right = 463.0
+offset_bottom = 153.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="4" type="Node" parent="."]
+script = ExtResource("7_bt8ef")
+
+[node name="button1" type="TextureButton" parent="4"]
+offset_left = 259.0
+offset_top = 83.0
+offset_right = 299.0
+offset_bottom = 153.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="button2" type="TextureButton" parent="4"]
+offset_left = 315.0
+offset_top = 79.0
+offset_right = 355.0
+offset_bottom = 149.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="button3" type="TextureButton" parent="4"]
+offset_left = 368.0
+offset_top = 82.0
+offset_right = 413.0
+offset_bottom = 152.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="button4" type="TextureButton" parent="4"]
+offset_left = 418.0
+offset_top = 83.0
+offset_right = 463.0
+offset_bottom = 153.0
+toggle_mode = true
+action_mode = 0
+button_mask = 3
+
+[node name="rgb" type="Node" parent="."]
+
+[node name="rl" type="Label" parent="rgb"]
+offset_left = 854.0
+offset_top = 78.0
+offset_right = 916.0
+offset_bottom = 105.0
+text = "r:"
+
+[node name="r" type="LineEdit" parent="rgb"]
+offset_left = 868.0
+offset_top = 75.0
+offset_right = 997.0
+offset_bottom = 106.0
+
+[node name="rl2" type="Label" parent="rgb"]
+offset_left = 853.0
+offset_top = 180.0
+offset_right = 915.0
+offset_bottom = 207.0
+text = "B:"
+
+[node name="r2" type="LineEdit" parent="rgb"]
+offset_left = 868.0
+offset_top = 177.0
+offset_right = 997.0
+offset_bottom = 208.0
+
+[node name="rl3" type="Label" parent="rgb"]
+offset_left = 850.0
+offset_top = 129.0
+offset_right = 912.0
+offset_bottom = 156.0
+text = "G:"
+
+[node name="r3" type="LineEdit" parent="rgb"]
+offset_left = 865.0
+offset_top = 126.0
+offset_right = 994.0
+offset_bottom = 157.0
+
+[node name="Button" type="Button" parent="."]
+offset_left = 1257.0
+offset_top = 142.0
+offset_right = 1325.0
+offset_bottom = 156.0
+button_mask = 7
+text = "reset"
+script = ExtResource("7_7dava")
+
+[connection signal="pressed" from="1/button1" to="1" method="_on_button_1_pressed"]
+[connection signal="pressed" from="1/button2" to="1" method="_on_button_2_pressed"]
+[connection signal="pressed" from="1/button3" to="1" method="_on_button_3_pressed"]
+[connection signal="pressed" from="1/button4" to="1" method="_on_button_4_pressed"]
+[connection signal="pressed" from="2/button1" to="2" method="_on_button_1_pressed"]
+[connection signal="pressed" from="2/button2" to="2" method="_on_button_2_pressed"]
+[connection signal="pressed" from="2/button3" to="2" method="_on_button_3_pressed"]
+[connection signal="pressed" from="2/button4" to="2" method="_on_button_4_pressed"]
+[connection signal="pressed" from="3/button1" to="3" method="_on_button_1_pressed"]
+[connection signal="pressed" from="3/button2" to="3" method="_on_button_2_pressed"]
+[connection signal="pressed" from="3/button3" to="3" method="_on_button_3_pressed"]
+[connection signal="pressed" from="3/button4" to="3" method="_on_button_4_pressed"]
+[connection signal="pressed" from="4/button1" to="4" method="_on_button_1_pressed"]
+[connection signal="pressed" from="4/button2" to="4" method="_on_button_2_pressed"]
+[connection signal="pressed" from="4/button3" to="4" method="_on_button_3_pressed"]
+[connection signal="pressed" from="4/button4" to="4" method="_on_button_4_pressed"]
+[connection signal="pressed" from="Button" to="Button" method="_on_pressed"]

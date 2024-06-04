@@ -222,6 +222,7 @@
                 "C:\\Users\\kill\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.11\\cores\\esp32",
                 "C:\\Users\\kill\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.11\\variants\\esp32s2",
                 "C:\\Users\\kill\\Documents\\Arduino\\libraries\\ArduinoJson\\src",
+                "C:\\Users\\kill\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.11\\libraries\\Wire\\src",
                 "C:\\Users\\kill\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\2.0.11\\libraries\\EEPROM\\src",
                 "C:\\Users\\kill\\Documents\\Arduino\\libraries\\FastLED\\src",
                 "c:\\users\\kill\\appdata\\local\\arduino15\\packages\\esp32\\tools\\xtensa-esp32s2-elf-gcc\\esp-2021r2-patch5-8.4.0\\xtensa-esp32s2-elf\\include\\c++\\8.4.0",

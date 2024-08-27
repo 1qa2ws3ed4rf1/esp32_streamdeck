@@ -1,14 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://bgai1j8wpe3mj"]
+[gd_scene load_steps=10 format=3 uid="uid://bgai1j8wpe3mj"]
 
 [ext_resource type="Script" path="res://Serial.cs" id="1_5of2a"]
 [ext_resource type="Texture2D" uid="uid://c8qmvfbmniqqe" path="res://3D_1-PCB_PCB_New1_2_2024-07-23.png" id="1_nmio5"]
 [ext_resource type="Script" path="res://1.gd" id="3_os8r7"]
-[ext_resource type="Script" path="res://2.gd" id="5_ht15u"]
-[ext_resource type="Script" path="res://3.gd" id="6_pcniu"]
+[ext_resource type="Script" path="res://button1.gd" id="4_rnnn3"]
+[ext_resource type="Script" path="res://button2.gd" id="5_gedxw"]
+[ext_resource type="Script" path="res://button3.gd" id="6_88xc5"]
 [ext_resource type="Script" path="res://Button.gd" id="7_7dava"]
-[ext_resource type="Script" path="res://4.gd" id="7_bt8ef"]
+[ext_resource type="Script" path="res://button4.gd" id="7_idxt6"]
+[ext_resource type="Script" path="res://node_2d.gd" id="9_lok0w"]
 
 [node name="Node2D" type="Node2D"]
+position = Vector2(0, 1)
 script = ExtResource("1_5of2a")
 
 [node name="3d1-pcbPcbNew122024-07-23" type="Sprite2D" parent="."]
@@ -59,6 +62,7 @@ offset_bottom = 153.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("4_rnnn3")
 
 [node name="button2" type="TextureButton" parent="1"]
 offset_left = 315.0
@@ -68,6 +72,7 @@ offset_bottom = 149.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("5_gedxw")
 
 [node name="button3" type="TextureButton" parent="1"]
 offset_left = 368.0
@@ -77,6 +82,7 @@ offset_bottom = 152.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("6_88xc5")
 
 [node name="button4" type="TextureButton" parent="1"]
 offset_left = 418.0
@@ -86,123 +92,136 @@ offset_bottom = 153.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("7_idxt6")
 
 [node name="2" type="Node" parent="."]
-script = ExtResource("5_ht15u")
+script = ExtResource("3_os8r7")
 
 [node name="button1" type="TextureButton" parent="2"]
-offset_left = 259.0
-offset_top = 83.0
-offset_right = 299.0
-offset_bottom = 153.0
+offset_left = 254.0
+offset_top = 197.0
+offset_right = 294.0
+offset_bottom = 267.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("4_rnnn3")
 
 [node name="button2" type="TextureButton" parent="2"]
-offset_left = 315.0
-offset_top = 79.0
-offset_right = 355.0
-offset_bottom = 149.0
+offset_left = 311.0
+offset_top = 190.0
+offset_right = 351.0
+offset_bottom = 260.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("5_gedxw")
 
 [node name="button3" type="TextureButton" parent="2"]
-offset_left = 368.0
-offset_top = 82.0
-offset_right = 413.0
-offset_bottom = 152.0
+offset_left = 375.0
+offset_top = 195.0
+offset_right = 420.0
+offset_bottom = 265.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("6_88xc5")
 
 [node name="button4" type="TextureButton" parent="2"]
-offset_left = 418.0
-offset_top = 83.0
-offset_right = 463.0
-offset_bottom = 153.0
+offset_left = 424.0
+offset_top = 198.0
+offset_right = 469.0
+offset_bottom = 268.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("7_idxt6")
 
 [node name="3" type="Node" parent="."]
-script = ExtResource("6_pcniu")
+script = ExtResource("3_os8r7")
 
 [node name="button1" type="TextureButton" parent="3"]
-offset_left = 259.0
-offset_top = 83.0
-offset_right = 299.0
-offset_bottom = 153.0
+offset_left = 251.0
+offset_top = 304.0
+offset_right = 291.0
+offset_bottom = 374.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("4_rnnn3")
 
 [node name="button2" type="TextureButton" parent="3"]
-offset_left = 315.0
-offset_top = 79.0
-offset_right = 355.0
-offset_bottom = 149.0
+offset_left = 308.0
+offset_top = 301.0
+offset_right = 348.0
+offset_bottom = 371.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("5_gedxw")
 
 [node name="button3" type="TextureButton" parent="3"]
-offset_left = 368.0
-offset_top = 82.0
-offset_right = 413.0
-offset_bottom = 152.0
+offset_left = 364.0
+offset_top = 298.0
+offset_right = 409.0
+offset_bottom = 368.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("6_88xc5")
 
 [node name="button4" type="TextureButton" parent="3"]
-offset_left = 418.0
-offset_top = 83.0
-offset_right = 463.0
-offset_bottom = 153.0
+offset_left = 422.0
+offset_top = 304.0
+offset_right = 467.0
+offset_bottom = 374.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("7_idxt6")
 
 [node name="4" type="Node" parent="."]
-script = ExtResource("7_bt8ef")
+script = ExtResource("3_os8r7")
 
 [node name="button1" type="TextureButton" parent="4"]
-offset_left = 259.0
-offset_top = 83.0
-offset_right = 299.0
-offset_bottom = 153.0
+offset_left = 249.0
+offset_top = 384.0
+offset_right = 289.0
+offset_bottom = 454.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("4_rnnn3")
 
 [node name="button2" type="TextureButton" parent="4"]
-offset_left = 315.0
-offset_top = 79.0
-offset_right = 355.0
-offset_bottom = 149.0
+offset_left = 293.0
+offset_top = 389.0
+offset_right = 333.0
+offset_bottom = 459.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("5_gedxw")
 
 [node name="button3" type="TextureButton" parent="4"]
-offset_left = 368.0
-offset_top = 82.0
-offset_right = 413.0
-offset_bottom = 152.0
+offset_left = 371.0
+offset_top = 387.0
+offset_right = 416.0
+offset_bottom = 457.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("6_88xc5")
 
 [node name="button4" type="TextureButton" parent="4"]
-offset_left = 418.0
-offset_top = 83.0
-offset_right = 463.0
-offset_bottom = 153.0
+offset_left = 420.0
+offset_top = 385.0
+offset_right = 465.0
+offset_bottom = 455.0
 toggle_mode = true
 action_mode = 0
 button_mask = 3
+script = ExtResource("7_idxt6")
 
 [node name="rgb" type="Node" parent="."]
 
@@ -254,6 +273,10 @@ button_mask = 7
 text = "reset"
 script = ExtResource("7_7dava")
 
+[node name="Node2D" type="Node2D" parent="."]
+script = ExtResource("9_lok0w")
+
+[connection signal="data_received" from="." to="Node2D" method="_on_node_2d_data_received"]
 [connection signal="pressed" from="1/button1" to="1" method="_on_button_1_pressed"]
 [connection signal="pressed" from="1/button2" to="1" method="_on_button_2_pressed"]
 [connection signal="pressed" from="1/button3" to="1" method="_on_button_3_pressed"]

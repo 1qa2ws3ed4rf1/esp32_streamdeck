@@ -71,13 +71,10 @@ public partial class Serial: Node2D {
                         port.DataBits = 8;
                         port.StopBits = StopBits.One;
                         port.Encoding = Encoding.UTF8;
-                    GD.Print("a");
                     port.DataReceived += data;
-                    GD.Print("b");
                     port.Open();
                     }
                     bool hasData = await tscb.Task;
-                    GD.Print("c");
                     if (hasData) {
                         string data = tscs.Task.Result;
                         // EmitSignal( nameof(data_received), data);

@@ -28,5 +28,5 @@ func _process(delta):
 func _on_node_2d_data_received(data):
 	var inp = JSON.parse_string(data)
 	b1.emit(inp["button"][15])
-	print(inp)
+	print(inp["button"])
 	pass # Replace with function body.

@@ -67,7 +67,7 @@ public partial class Serial: Node2D {
                     if(!port.IsOpen){
                         
                         port.PortName = portName;
-                        port.BaudRate = 115200;
+                        port.BaudRate = 128000;
                         port.DataBits = 8;
                         port.StopBits = StopBits.One;
                         port.Encoding = Encoding.UTF8;
@@ -78,7 +78,6 @@ public partial class Serial: Node2D {
                     if (hasData) {
                         string data = tscs.Task.Result;
                         // EmitSignal( nameof(data_received), data);
-                        GD.Print("try");
                         this.CallDeferred("emit_signal", "data_received", data);
                         break;
                     }
@@ -96,6 +95,7 @@ public partial class Serial: Node2D {
     private void data(object sender, SerialDataReceivedEventArgs e) {
         try {
             SerialPort _p = (SerialPort) sender;
+            await ToSignal();
             if (_p.IsOpen) {
                 tscl.TrySetResult(false);
                 string Data = _p.ReadTo(Eof);

@@ -67,7 +67,7 @@ public partial class Serial: Node2D {
                     if(!port.IsOpen){
                         
                         port.PortName = portName;
-                        port.BaudRate = 512000;
+                        port.BaudRate = 128000;
                         port.DataBits = 8;
                         port.StopBits = StopBits.One;
                         port.Encoding = Encoding.UTF8;

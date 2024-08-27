@@ -1,4 +1,4 @@
-extends Control
+extends Node2D
 signal b1
 signal b2
 signal b3
@@ -26,5 +26,7 @@ func _process(delta):
 
 
 func _on_node_2d_data_received(data):
-	
+	var inp = JSON.parse_string(data)
+	b1.emit(inp["button"][15])
+	print(inp)
 	pass # Replace with function body.

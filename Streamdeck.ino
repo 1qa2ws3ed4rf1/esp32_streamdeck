@@ -34,7 +34,7 @@ QueueHandle_t uartin;
 CRGB leds[NUM_LEDS];  // var
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(128000);
+  Serial.begin(115200);
   Serial1.begin(115200);  // garbage throw at here...
   Serial.printf("Starting system init,LEDS init and shift init \n");
   shift.begin(34, 36, 33, 35);
@@ -157,6 +157,7 @@ void main_uart_hand(void *p) {
       serializeJson(jsonBuffer, uartoutput);
       Serial.println(uartoutput+"Eof");
     }
+    delayMicroseconds(30);
   }
 }
 
